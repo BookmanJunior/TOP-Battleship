@@ -6,6 +6,7 @@ test("Ship properties include: length, hit count and status", () => {
     length: 5,
     hitCount: 0,
     isSunk: false,
+    coordinates: [],
   });
 });
 
