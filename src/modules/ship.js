@@ -3,6 +3,7 @@ const Ship = (length) => {
     length,
     hitCount: 0,
     isSunk: false,
+    coordinates: [],
   };
 
   const hit = () => {
