@@ -15,17 +15,36 @@ const Gameboard = () => {
   }
 
   const placeShip = (ship, startingCoor) => {
-    const coors = ship.info.coordinates;
-    coors.push(startingCoor);
-    occupiedSquares.push(startingCoor);
+    if (!isValidPlacement(startingCoor)) return;
 
-    for (let i = 1; i < ship.info.length; i++) {
+    const shipInfo = ship.info;
+
+    for (let i = 0; i < shipInfo.length; i++) {
       const newCoordinates = [startingCoor[0], startingCoor[1] + i];
-      coors.push(newCoordinates);
+      if (!isValidPlacement(newCoordinates)) {
+        // reset ships coordinates if placement is invalid
+        shipInfo.coordinates = [];
+        return;
+      }
+      shipInfo.coordinates.push(newCoordinates);
       occupiedSquares.push(newCoordinates);
     }
     ships.push(ship);
   };
+
+  function isValidPlacement(coordinates) {
+    return isOnBoard(coordinates) && !isCoordinateOccupied(coordinates);
+  }
+
+  function isOnBoard(coordinates) {
+    return coordinates[0] <= 9 && coordinates[1] <= 9;
+  }
+
+  function isCoordinateOccupied(coordinates) {
+    return occupiedSquares.find((square) =>
+      square.every((c, index) => c === coordinates[index])
+    );
+  }
 
   return {
     placeShip,
