@@ -2,6 +2,8 @@ const Gameboard = () => {
   const gameboard = generateBoard();
   const ships = [];
   const occupiedSquares = [];
+  // const hitSquares = [];
+  let isVertical = false;
 
   function generateBoard() {
     const arr = [];
@@ -20,7 +22,9 @@ const Gameboard = () => {
     const shipInfo = ship.info;
 
     for (let i = 0; i < shipInfo.length; i++) {
-      const newCoordinates = [startingCoor[0], startingCoor[1] + i];
+      const newX = [startingCoor[0], startingCoor[1] + i];
+      const newY = [startingCoor[0] + i, startingCoor[1]];
+      const newCoordinates = isVertical ? newY : newX;
       if (!isValidPlacement(newCoordinates)) {
         // reset ships coordinates if placement is invalid
         shipInfo.coordinates = [];
@@ -30,6 +34,10 @@ const Gameboard = () => {
       occupiedSquares.push(newCoordinates);
     }
     ships.push(ship);
+  };
+
+  const changePlacementPlane = () => {
+    isVertical = !isVertical;
   };
 
   function isValidPlacement(coordinates) {
@@ -48,6 +56,7 @@ const Gameboard = () => {
 
   return {
     placeShip,
+    changePlacementPlane,
     get board() {
       return gameboard;
     },
