@@ -74,3 +74,17 @@ test("Receive attack and sink a ship", () => {
   attackBoard.receiveAttack([0, 3]);
   expect(ship.info.isSunk).toBe(true);
 });
+
+test("Report all ships have been sunk", () => {
+  const testBoard = Gameboard();
+  const ship1 = Ship(1);
+  const ship2 = Ship(1);
+  const ship3 = Ship(1);
+  testBoard.placeShip(ship1, [0, 0]);
+  testBoard.placeShip(ship2, [1, 1]);
+  testBoard.placeShip(ship3, [5, 5]);
+  testBoard.receiveAttack([0, 0]);
+  testBoard.receiveAttack([1, 1]);
+  testBoard.receiveAttack([5, 5]);
+  expect(testBoard.allShipsSunk()).toBe(true);
+});
