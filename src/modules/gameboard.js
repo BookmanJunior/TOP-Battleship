@@ -46,6 +46,11 @@ const Gameboard = () => {
     }
   };
 
+  const allShipsSunk = () => {
+    const allSunkenShips = ships.filter((ship) => ship.info.isSunk);
+    return allSunkenShips.length === ships.length;
+  };
+
   const changePlacementPlane = () => {
     isVertical = !isVertical;
   };
@@ -77,6 +82,7 @@ const Gameboard = () => {
     placeShip,
     changePlacementPlane,
     receiveAttack,
+    allShipsSunk,
     get hitSquares() {
       return hitSquares;
     },
