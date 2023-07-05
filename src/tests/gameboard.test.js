@@ -63,3 +63,14 @@ test("Prevents vertical ship placement if ship length goes off board", () => {
   offBoardVertically.placeShip(offBoardShip, [6, 0]);
   expect(offBoardShip.info.coordinates).toStrictEqual([]);
 });
+
+test("Receive attack and sink a ship", () => {
+  const attackBoard = Gameboard();
+  const ship = Ship(4);
+  attackBoard.placeShip(ship, [0, 0]);
+  attackBoard.receiveAttack([0, 0]);
+  attackBoard.receiveAttack([0, 1]);
+  attackBoard.receiveAttack([0, 2]);
+  attackBoard.receiveAttack([0, 3]);
+  expect(ship.info.isSunk).toBe(true);
+});
