@@ -2,7 +2,7 @@ const Gameboard = () => {
   const gameboard = generateBoard();
   const ships = [];
   const occupiedSquares = [];
-  // const hitSquares = [];
+  const hitSquares = [];
   let isVertical = false;
 
   function generateBoard() {
@@ -36,6 +36,16 @@ const Gameboard = () => {
     ships.push(ship);
   };
 
+  const receiveAttack = (coordinates) => {
+    const hitShip = isShipCoordinate(coordinates);
+    if (hitShip) {
+      hitShip[0].hit();
+      hitShip[0].info.isSunk = !!hitShip[0].isSunk();
+    } else {
+      hitSquares.push(coordinates);
+    }
+  };
+
   const changePlacementPlane = () => {
     isVertical = !isVertical;
   };
@@ -54,9 +64,22 @@ const Gameboard = () => {
     );
   }
 
+  function isShipCoordinate(coordinates) {
+    return ships.filter((ship) => {
+      const shipsCoor = ship.info.coordinates;
+      return shipsCoor.find((coor) =>
+        coor.every((c, index) => c === coordinates[index])
+      );
+    });
+  }
+
   return {
     placeShip,
     changePlacementPlane,
+    receiveAttack,
+    get hitSquares() {
+      return hitSquares;
+    },
     get board() {
       return gameboard;
     },
