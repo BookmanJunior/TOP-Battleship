@@ -1,7 +1,7 @@
 const Gameboard = () => {
   const gameboard = generateBoard();
   const ships = [];
-  const occupiedSquares = [];
+  const shipsCoordinates = [];
   const hitSquares = [];
   let isVertical = false;
 
@@ -31,19 +31,19 @@ const Gameboard = () => {
         return;
       }
       shipInfo.coordinates.push(newCoordinates);
-      occupiedSquares.push(newCoordinates);
+      shipsCoordinates.push(newCoordinates);
     }
     ships.push(ship);
   };
 
   const receiveAttack = (coordinates) => {
-    const hitShip = isShipCoordinate(coordinates);
-    if (hitShip) {
-      hitShip[0].hit();
-      hitShip[0].info.isSunk = !!hitShip[0].isSunk();
-    } else {
-      hitSquares.push(coordinates);
+    const isShip = isShipCoordinate(coordinates);
+    if (isShip.length) {
+      isShip[0].hit();
+      // change ships sunk status if it was sunk
+      isShip[0].info.isSunk = !!isShip[0].isSunk();
     }
+    hitSquares.push(coordinates);
   };
 
   const allShipsSunk = () => {
@@ -64,7 +64,7 @@ const Gameboard = () => {
   }
 
   function isCoordinateOccupied(coordinates) {
-    return occupiedSquares.find((square) =>
+    return shipsCoordinates.find((square) =>
       square.every((c, index) => c === coordinates[index])
     );
   }
@@ -88,6 +88,9 @@ const Gameboard = () => {
     },
     get board() {
       return gameboard;
+    },
+    get shipsCoordinates() {
+      return shipsCoordinates;
     },
   };
 };
