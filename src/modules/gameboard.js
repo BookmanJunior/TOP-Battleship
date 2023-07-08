@@ -1,4 +1,4 @@
-const Gameboard = () => {
+const Gameboard = (shipMaker) => {
   const gameboard = generateBoard();
   const ships = [];
   const shipsCoordinates = [];
@@ -16,24 +16,24 @@ const Gameboard = () => {
     return arr;
   }
 
-  const placeShip = (ship, startingCoor) => {
+  const placeShip = (length, startingCoor) => {
     if (!isValidPlacement(startingCoor)) return;
 
+    const ship = shipMaker(length);
     const shipInfo = ship.info;
 
     for (let i = 0; i < shipInfo.length; i++) {
       const newX = [startingCoor[0], startingCoor[1] + i];
       const newY = [startingCoor[0] + i, startingCoor[1]];
       const newCoordinates = isVertical ? newY : newX;
+
       if (!isValidPlacement(newCoordinates)) {
-        // reset ships coordinates if placement is invalid
-        shipInfo.coordinates = [];
         return;
       }
       shipInfo.coordinates.push(newCoordinates);
-      shipsCoordinates.push(newCoordinates);
     }
     ships.push(ship);
+    shipsCoordinates.push(...shipInfo.coordinates);
   };
 
   const receiveAttack = (coordinates) => {
