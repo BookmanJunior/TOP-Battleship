@@ -21,8 +21,18 @@ const screenController = () => {
     renderTarget.appendChild(boardDiv);
   };
 
+  const renderShips = (boardObj, playerBoard) => {
+    const boardEl = document.querySelector(`.${playerBoard}`);
+
+    boardObj.shipsCoordinates.forEach((square) => {
+      const squareEl = boardEl.querySelector(`[data-coordinates="${square}"]`);
+      squareEl.dataset.occupied = "ship";
+    });
+  };
+
   return {
     renderBoard,
+    renderShips,
   };
 };
 
