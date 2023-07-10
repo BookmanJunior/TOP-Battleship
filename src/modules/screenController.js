@@ -2,7 +2,7 @@ const screenController = () => {
   const renderBoard = (boardObj, renderTarget, player) => {
     const gameBoard = boardObj.board;
     const boardDiv = document.createElement("div");
-    boardDiv.classList.add(`${player}-gameboard`);
+    boardDiv.classList.add(`${player}-gameboard`, "gameboard");
 
     gameBoard.forEach((row, rowIndex) => {
       const rowDiv = document.createElement("div");
