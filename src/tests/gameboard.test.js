@@ -83,3 +83,9 @@ test("Report all ships have been sunk", () => {
   testBoard.receiveAttack([5, 5]);
   expect(testBoard.allShipsSunk()).toBe(true);
 });
+
+test("Randomize placement of 5 ships on board", () => {
+  const board = Gameboard(Ship);
+  board.placeAllShips();
+  expect(board.shipsCoordinates.length).toBe(16);
+});
