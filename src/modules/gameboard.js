@@ -1,3 +1,5 @@
+import generateRandomCoordinates from "./coordinateGenerator";
+
 const Gameboard = (shipMaker) => {
   const gameboard = generateBoard();
   const ships = [];
@@ -34,6 +36,19 @@ const Gameboard = (shipMaker) => {
     }
     ships.push(ship);
     shipsCoordinates.push(...shipInfo.coordinates);
+    return ship;
+  };
+
+  const randomizeShipPlacement = () => {
+    const shipsLength = [5, 4, 3, 2, 2];
+    for (let i = 0; i <= shipsLength.length; i++) {
+      const randomPlane = Math.floor(Math.random() * 2);
+      isVertical = !!randomPlane;
+      let randomCoordinate = generateRandomCoordinates();
+      while (!placeShip(shipsLength[i], randomCoordinate)) {
+        randomCoordinate = generateRandomCoordinates();
+      }
+    }
   };
 
   const receiveAttack = (coordinates) => {
@@ -42,8 +57,10 @@ const Gameboard = (shipMaker) => {
       isShip[0].hit();
       // change ships sunk status if it was sunk
       isShip[0].info.isSunk = !!isShip[0].isSunk();
+      return "hit";
     }
     hitSquares.push(coordinates);
+    return "miss";
   };
 
   const allShipsSunk = () => {
@@ -83,6 +100,7 @@ const Gameboard = (shipMaker) => {
     changePlacementPlane,
     receiveAttack,
     allShipsSunk,
+    randomizeShipPlacement,
     get hitSquares() {
       return hitSquares;
     },
