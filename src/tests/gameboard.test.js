@@ -86,6 +86,6 @@ test("Report all ships have been sunk", () => {
 
 test("Randomize placement of 5 ships on board", () => {
   const board = Gameboard(Ship);
-  board.placeAllShips();
+  board.randomizeShipPlacement();
   expect(board.shipsCoordinates.length).toBe(16);
 });
