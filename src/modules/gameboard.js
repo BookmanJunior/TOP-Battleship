@@ -41,7 +41,7 @@ const Gameboard = (shipMaker) => {
 
   const randomizeShipPlacement = () => {
     const shipsLength = [5, 4, 3, 2, 2];
-    for (let i = 0; i <= shipsLength.length; i++) {
+    for (let i = 0; i < shipsLength.length; i++) {
       const randomPlane = Math.floor(Math.random() * 2);
       isVertical = !!randomPlane;
       let randomCoordinate = generateRandomCoordinates();
@@ -109,6 +109,9 @@ const Gameboard = (shipMaker) => {
     },
     get shipsCoordinates() {
       return shipsCoordinates;
+    },
+    get ships() {
+      return ships;
     },
   };
 };
