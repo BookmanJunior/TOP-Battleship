@@ -30,9 +30,16 @@ const screenController = () => {
     });
   };
 
+  function getSquareCoordinates(cell) {
+    return cell.dataset.coordinates
+      .split(",")
+      .map((coordinate) => parseInt(coordinate, 10));
+  }
+
   return {
     renderBoard,
     renderShips,
+    getSquareCoordinates,
   };
 };
 
