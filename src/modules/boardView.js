@@ -33,6 +33,10 @@ const BoardView = () => {
     });
   };
 
+  function getSquares() {
+    return [...document.querySelectorAll(".square")];
+  }
+
   function getSquareCoordinates(cell) {
     return cell.dataset.coordinates
       .split(",")
@@ -52,6 +56,7 @@ const BoardView = () => {
   return {
     renderBoard,
     renderShips,
+    getSquares,
     getSquareCoordinates,
     displayWinner,
   };
