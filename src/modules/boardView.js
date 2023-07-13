@@ -1,5 +1,6 @@
 const BoardView = () => {
   const main = document.getElementById("main");
+  const modal = document.querySelector("dialog");
 
   const renderBoard = (boardObj, player) => {
     const gameBoard = boardObj.board;
@@ -38,10 +39,21 @@ const BoardView = () => {
       .map((coordinate) => parseInt(coordinate, 10));
   }
 
+  function displayWinner(msg) {
+    openModal();
+    const winnerEl = modal.querySelector(".winner");
+    winnerEl.textContent = msg;
+  }
+
+  function openModal() {
+    modal.showModal();
+  }
+
   return {
     renderBoard,
     renderShips,
     getSquareCoordinates,
+    displayWinner,
   };
 };
 
