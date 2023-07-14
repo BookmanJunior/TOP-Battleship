@@ -1,6 +1,6 @@
 import { generateRandomCoordinates } from "./coordinateGenerator";
 
-const Gameboard = (shipMaker) => {
+const Gameboard = (name, shipMaker) => {
   const gameboard = generateBoard();
   const ships = [];
   const shipsCoordinates = [];
@@ -58,7 +58,7 @@ const Gameboard = (shipMaker) => {
       // change ships sunk status if it was sunk
       isShip[0].info.isSunk = !!isShip[0].isSunk();
       hitSquares.push(coordinates);
-      return "hit";
+      return isShip[0].isSunk() ? isShip[0].info.coordinates : "hit";
     }
     hitSquares.push(coordinates);
     return "miss";
@@ -113,6 +113,9 @@ const Gameboard = (shipMaker) => {
     },
     get ships() {
       return ships;
+    },
+    get name() {
+      return name;
     },
   };
 };
