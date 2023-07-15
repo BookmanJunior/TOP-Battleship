@@ -24,14 +24,30 @@ const BoardView = () => {
     main.appendChild(boardDiv);
   };
 
-  const renderShips = (boardObj, playerBoard) => {
-    const boardEl = document.querySelector(`.${playerBoard}`);
+  const renderShips = (boardObj) => {
+    const { shipsCoordinates } = boardObj;
 
-    boardObj.shipsCoordinates.forEach((square) => {
-      const squareEl = boardEl.querySelector(`[data-coordinates="${square}"]`);
-      squareEl.dataset.occupied = "ship";
-    });
+    updateSquare(shipsCoordinates, boardObj, "occupied", "ship");
   };
+
+  const updateAttackedSquare = (attackResult, currentBoard, square) => {
+    // sunk ship returns array
+    if (Array.isArray(attackResult)) {
+      updateSquare(attackResult, currentBoard, "status", "sunk");
+      return;
+    }
+
+    square.dataset.status = attackResult;
+  };
+
+  function updateSquare(squaresToUpdate, playerBoard, dataAtt, status) {
+    const boardEl = document.querySelector(`.${playerBoard.name}`);
+
+    squaresToUpdate.forEach((square) => {
+      const squareEl = boardEl.querySelector(`[data-coordinates="${square}"]`);
+      squareEl.dataset[dataAtt] = status;
+    });
+  }
 
   function getSquares() {
     return [...document.querySelectorAll(".square")];
@@ -56,6 +72,7 @@ const BoardView = () => {
   return {
     renderBoard,
     renderShips,
+    updateAttackedSquare,
     getSquares,
     getSquareCoordinates,
     displayWinner,
