@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "watch": "webpack --watch",
+    "test:watch": "jest --watchAll",
     "start": "webpack server --open",
     "build": "webpack"
   },
