@@ -19,9 +19,10 @@ const Board = (boardObj, player) => {
 
     const fleetSign = createFleetSign(player);
     const rowNumDiv = createRowNumeration();
+    const columnLettersDiv = createColumnLetter();
     const gameBoard = createGameBoard();
 
-    gameboardWrapper.append(fleetSign, rowNumDiv, gameBoard);
+    gameboardWrapper.append(fleetSign, rowNumDiv, columnLettersDiv, gameBoard);
 
     return gameboardWrapper;
   }
@@ -70,6 +71,20 @@ const Board = (boardObj, player) => {
       rowNumDiv.appendChild(rowNum);
     }
     return rowNumDiv;
+  }
+
+  function createColumnLetter() {
+    const columnDiv = document.createElement("div");
+
+    columnDiv.classList.add("column-letters");
+
+    for (const letter of Object.keys(boardNotation)) {
+      const columnLetter = document.createElement("p");
+      columnLetter.textContent = letter;
+      columnDiv.appendChild(columnLetter);
+    }
+
+    return columnDiv;
   }
 
   return {
