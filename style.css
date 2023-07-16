@@ -3,6 +3,7 @@
 :root {
   --main-square-clr: #dff4ff;
   --main-font-clr: #717c96;
+  --secondary-font-clr: #ffffff;
   --ship-clr: #3b16bf;
   --bright-accent-clr: #ff0055;
   --mild-accent-clr: #858888;
@@ -70,4 +71,62 @@ main {
   gap: 10em;
 
   min-height: 100vh;
+}
+
+/* Gameboard wrapper styles */
+
+.gameboard-wrapper {
+  display: grid;
+  grid-template-columns: auto auto;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.5rem;
+  gap: 0.625em;
+}
+
+.fleet-sign {
+  --fleet-properties: 5px;
+
+  grid-column: 1 / 3;
+  display: grid;
+  place-items: center;
+
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  color: var(--secondary-font-clr);
+
+  border-radius: var(--fleet-properties);
+  padding-block: var(--fleet-properties);
+  margin-bottom: 1em;
+}
+
+.player1-fleet {
+  background-color: var(--bright-accent-clr);
+}
+
+.player2-fleet {
+  background-color: var(--secondary-accent-clr);
+}
+
+.column-letters,
+.row-numeration {
+  display: grid;
+  gap: var(--square-gap);
+  text-align: center;
+}
+
+.column-letters {
+  grid-column: 2;
+  grid-row: 2;
+  grid-template-columns: repeat(10, var(--square-size));
+  color: var(--main-font-clr);
+}
+
+.row-numeration {
+  grid-template-rows: repeat(10, var(--square-size));
+  color: var(--main-font-clr);
+}
+
+.row-numeration,
+.gameboard {
+  grid-row: 3;
 }
