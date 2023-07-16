@@ -1,3 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap");
+
+:root {
+  --main-square-clr: #dff4ff;
+  --main-font-clr: #717c96;
+  --ship-clr: #3b16bf;
+  --bright-accent-clr: #ff0055;
+  --mild-accent-clr: #858888;
+  --secondary-accent-clr: #65708b;
+  --square-size: 2.5rem;
+  --square-gap: 0.313rem;
+}
+
 *,
 *::before,
 *::after {
@@ -51,5 +64,10 @@ body {
 }
 
 main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10em;
+
   min-height: 100vh;
 }
