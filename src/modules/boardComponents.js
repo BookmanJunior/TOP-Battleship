@@ -18,9 +18,10 @@ const Board = (boardObj, player) => {
     gameboardWrapper.classList.add("gameboard-wrapper");
 
     const fleetSign = createFleetSign(player);
+    const rowNumDiv = createRowNumeration();
     const gameBoard = createGameBoard();
 
-    gameboardWrapper.append(fleetSign, gameBoard);
+    gameboardWrapper.append(fleetSign, rowNumDiv, gameBoard);
 
     return gameboardWrapper;
   }
@@ -56,6 +57,19 @@ const Board = (boardObj, player) => {
       : "Opponent";
 
     return fleetSign;
+  }
+
+  function createRowNumeration() {
+    const rowNumDiv = document.createElement("div");
+
+    rowNumDiv.classList.add("row-numeration");
+
+    for (const num of Object.values(boardNotation)) {
+      const rowNum = document.createElement("p");
+      rowNum.textContent = num;
+      rowNumDiv.appendChild(rowNum);
+    }
+    return rowNumDiv;
   }
 
   return {
