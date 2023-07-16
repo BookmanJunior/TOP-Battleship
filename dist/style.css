@@ -2,6 +2,7 @@
 
 :root {
   --main-square-clr: #dff4ff;
+  --square-accent-clr: #93d4f7;
   --main-font-clr: #717c96;
   --secondary-font-clr: #ffffff;
   --ship-clr: #3b16bf;
@@ -9,7 +10,7 @@
   --mild-accent-clr: #858888;
   --secondary-accent-clr: #65708b;
   --square-size: 2.5rem;
-  --square-gap: 0.313rem;
+  --square-gap: 0.313em;
 }
 
 *,
@@ -129,4 +130,70 @@ main {
 .row-numeration,
 .gameboard {
   grid-row: 3;
+}
+
+/* gameboard styles */
+
+.gameboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--square-gap);
+}
+
+.row {
+  display: flex;
+  gap: var(--square-gap);
+}
+
+.square {
+  display: grid;
+  place-items: center;
+
+  width: var(--square-size);
+  aspect-ratio: 1;
+  border: 1px solid var(--square-accent-clr);
+  background-color: var(--main-square-clr);
+  border-radius: 5px;
+}
+
+.square[data-status="none"] {
+  cursor: crosshair;
+}
+
+.square[data-status]:not([data-status="none"]) {
+  cursor: not-allowed;
+}
+
+.square[data-occupied="ship"] {
+  background-color: var(--ship-clr);
+}
+
+.square[data-status="hit"]::after {
+  content: "";
+  height: 20px;
+  aspect-ratio: 1;
+  background-color: var(--bright-accent-clr);
+  border-radius: 50%;
+}
+
+.square[data-status="miss"]::after {
+  content: "";
+  height: 20px;
+  aspect-ratio: 1;
+  background-color: var(--mild-accent-clr);
+  border-radius: 50%;
+}
+
+.square[data-status="sunk"] {
+  background-color: #7fffd4;
+}
+
+.square.potential-placement {
+  animation: highlightShip 700ms alternate infinite;
+}
+
+@keyframes highlightShip {
+  to {
+    background-color: var(--ship-clr);
+  }
 }
