@@ -12,6 +12,19 @@ const Board = (boardObj, player) => {
     J: 10,
   };
 
+  function createGameboardComponents() {
+    const gameboardWrapper = document.createElement("div");
+
+    gameboardWrapper.classList.add("gameboard-wrapper");
+
+    const fleetSign = createFleetSign(player);
+    const gameBoard = createGameBoard();
+
+    gameboardWrapper.append(fleetSign, gameBoard);
+
+    return gameboardWrapper;
+  }
+
   function createGameBoard() {
     const gameBoardDiv = document.createElement("div");
     gameBoardDiv.classList.add(`${player}-gameboard`, "gameboard");
@@ -34,7 +47,20 @@ const Board = (boardObj, player) => {
     return gameBoardDiv;
   }
 
-  return {};
+  function createFleetSign() {
+    const fleetSign = document.createElement("div");
+    fleetSign.classList.add(`${player}-fleet`, "fleet-sign");
+
+    fleetSign.textContent = fleetSign.classList.contains("player1-fleet")
+      ? "Your Fleet"
+      : "Opponent";
+
+    return fleetSign;
+  }
+
+  return {
+    createGameboardComponents,
+  };
 };
 
 export default Board;
