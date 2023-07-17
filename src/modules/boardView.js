@@ -12,20 +12,20 @@ const BoardView = () => {
   const renderShips = (boardObj) => {
     const { shipsCoordinates } = boardObj;
 
-    updateSquare(shipsCoordinates, boardObj, "occupied", "ship");
+    updateSquare(boardObj, shipsCoordinates, "occupied", "ship");
   };
 
-  const updateAttackedSquare = (attackResult, currentBoard, square) => {
+  const updateAttackedSquare = (currentBoard, square, attackResult) => {
     // sunk ship returns array
     if (Array.isArray(attackResult)) {
-      updateSquare(attackResult, currentBoard, "status", "sunk");
+      updateSquare(currentBoard, attackResult, "status", "sunk");
       return;
     }
 
     square.dataset.status = attackResult;
   };
 
-  function updateSquare(squaresToUpdate, playerBoard, dataAtt, status) {
+  function updateSquare(playerBoard, squaresToUpdate, dataAtt, status) {
     const boardEl = document.querySelector(`.${playerBoard.name}`);
 
     squaresToUpdate.forEach((square) => {
