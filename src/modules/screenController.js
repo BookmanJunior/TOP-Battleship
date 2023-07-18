@@ -28,6 +28,10 @@ const screenController = () => {
   });
 
   boardSquares.forEach((square) => {
+    square.addEventListener("click", placeShip);
+  });
+
+  boardSquares.forEach((square) => {
     square.addEventListener("click", play);
   });
 
@@ -67,6 +71,33 @@ const screenController = () => {
         `[data-coordinates="${randomCoordinates}"]`
       );
       makeTurn(game.player1Gameboard, attackedSquareEl, randomCoordinates);
+    }
+  }
+
+  function placeShip(square) {
+    const squareInfo = square.target;
+    if (!!isTheRightBoard(squareInfo) || game.state !== "placing-ship") return;
+
+    const squareCoordinates = parseSquareCoordinates(squareInfo);
+    if (
+      game.currentBoard.placeShip(
+        game.currentBoard.getAvailableShips()[0],
+        squareCoordinates
+      )
+    ) {
+      cachedSquares.forEach((s) => {
+        s.dataset.occupied = "ship";
+        s.classList.remove("potential-placement");
+      });
+      cachedSquares = [];
+      game.currentBoard.getAvailableShips().shift();
+    }
+
+    // start game when all ships have been placed
+    if (game.isReadyToStart() && game.mode === "ai") {
+      game.changeState();
+      // set current board to player2 to display attack correctly
+      game.changeCurrentBoard();
     }
   }
 
