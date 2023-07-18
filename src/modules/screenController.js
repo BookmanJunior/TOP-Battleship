@@ -118,7 +118,10 @@ const screenController = () => {
       // recalculate ship placement
       const startingCoor = cachedSquares.validSquares[0];
       removeShipCoordinatesHighlight();
-      highlightShipCoordinates(startingCoor);
+      // synchronizes animation
+      setTimeout(() => {
+        highlightShipCoordinates(startingCoor);
+      }, 20);
     }
   }
 
