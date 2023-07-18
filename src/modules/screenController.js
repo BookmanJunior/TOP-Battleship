@@ -6,7 +6,10 @@ const screenController = () => {
   const game = GameController();
   const boardView = BoardView();
 
-  let cachedSquares = [];
+  const cachedSquares = {
+    invalidSquares: [], // stores squares that weren't valid to remove styling
+    validSquares: [],
+  };
 
   game.player2Gameboard.randomizeShipPlacement();
 
@@ -34,6 +37,8 @@ const screenController = () => {
   boardSquares.forEach((square) => {
     square.addEventListener("click", play);
   });
+
+  document.body.addEventListener("keydown", changeShipPlacement);
 
   function play(square) {
     const squareInfo = square.target;
@@ -85,11 +90,11 @@ const screenController = () => {
         squareCoordinates
       )
     ) {
-      cachedSquares.forEach((s) => {
+      cachedSquares.validSquares.forEach((s) => {
         s.dataset.occupied = "ship";
         s.classList.remove("potential-placement");
       });
-      cachedSquares = [];
+      cachedSquares.validSquares = [];
       game.currentBoard.getAvailableShips().shift();
     }
 
@@ -98,6 +103,22 @@ const screenController = () => {
       game.changeState();
       // set current board to player2 to display attack correctly
       game.changeCurrentBoard();
+    }
+  }
+
+  function changeShipPlacement(e) {
+    if (
+      e.key.toLocaleLowerCase() === "r" &&
+      e.ctrlKey &&
+      e.altKey &&
+      cachedSquares.validSquares.length &&
+      game.state === "placing-ship"
+    ) {
+      game.currentBoard.changePlacementPlane();
+      // recalculate ship placement
+      const startingCoor = cachedSquares.validSquares[0];
+      removeShipCoordinatesHighlight();
+      highlightShipCoordinates(startingCoor);
     }
   }
 
@@ -116,23 +137,30 @@ const screenController = () => {
     );
     if (!isValidCoordinatePlacement) {
       square.style.cursor = "not-allowed";
+      // cache square to remove styles
+      cachedSquares.invalidSquares.push(square);
+      // cache square for when user wants to change placement axis
+      cachedSquares.validSquares.push(square);
       return;
     }
     isValidCoordinatePlacement.forEach((s) => {
       const squareEl = document.querySelector(`[data-coordinates="${s}"]`);
       squareEl.classList.add("potential-placement");
-      cachedSquares.push(squareEl);
+      cachedSquares.validSquares.push(squareEl);
     });
   }
 
   function removeShipCoordinatesHighlight() {
     if (game.state !== "placing-ship") return;
 
-    cachedSquares.forEach((cachedSquare) => {
+    cachedSquares.validSquares.forEach((cachedSquare) => {
       cachedSquare.classList.remove("potential-placement");
+      if (cachedSquare.hasAttribute("style")) {
+        cachedSquare.removeAttribute("style");
+      }
     });
     // reset cached squares when player stops hovering over a square
-    cachedSquares = [];
+    cachedSquares.validSquares = [];
   }
 
   function isTheRightBoard(square) {
