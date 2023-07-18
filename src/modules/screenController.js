@@ -6,7 +6,8 @@ const screenController = () => {
   const game = GameController();
   const boardView = BoardView();
 
-  game.player1Gameboard.randomizeShipPlacement();
+  let cachedSquares = [];
+
   game.player2Gameboard.randomizeShipPlacement();
 
   boardView.renderBoard(game.player1Gameboard, "player1");
@@ -14,12 +15,17 @@ const screenController = () => {
   boardView.renderShips(game.player1Gameboard);
   boardView.renderShips(game.player2Gameboard);
 
-  // set game to playing
-  game.changeState();
-  // change gameBoard to player2 to display attacks properly
-  game.changeCurrentBoard();
-
   const boardSquares = boardView.getSquares();
+
+  boardSquares.forEach((square) => {
+    square.addEventListener("mouseenter", () => {
+      highlightShipCoordinates(square);
+    });
+  });
+
+  boardSquares.forEach((square) => {
+    square.addEventListener("mouseleave", removeShipCoordinatesHighlight);
+  });
 
   boardSquares.forEach((square) => {
     square.addEventListener("click", play);
@@ -62,6 +68,40 @@ const screenController = () => {
       );
       makeTurn(game.player1Gameboard, attackedSquareEl, randomCoordinates);
     }
+  }
+
+  function highlightShipCoordinates(square) {
+    // const squareInfo = square.target;
+    if (game.state !== "placing-ship") {
+      return;
+    }
+
+    if (isTheRightBoard(square)) return;
+
+    const squareCoor = parseSquareCoordinates(square);
+    const isValidCoordinatePlacement = game.currentBoard.getNewCoordinates(
+      game.currentBoard.getAvailableShips()[0],
+      squareCoor
+    );
+    if (!isValidCoordinatePlacement) {
+      square.style.cursor = "not-allowed";
+      return;
+    }
+    isValidCoordinatePlacement.forEach((s) => {
+      const squareEl = document.querySelector(`[data-coordinates="${s}"]`);
+      squareEl.classList.add("potential-placement");
+      cachedSquares.push(squareEl);
+    });
+  }
+
+  function removeShipCoordinatesHighlight() {
+    if (game.state !== "placing-ship") return;
+
+    cachedSquares.forEach((cachedSquare) => {
+      cachedSquare.classList.remove("potential-placement");
+    });
+    // reset cached squares when player stops hovering over a square
+    cachedSquares = [];
   }
 
   function isTheRightBoard(square) {
