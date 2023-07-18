@@ -19,6 +19,98 @@ const GameController = () => {
     ai: "ai",
     player: "player",
   };
+
+  // defaults
+  let currentPlayer = player1;
+  let currentBoard = player1Gameboard;
+  let state = gameState["placing-ship"];
+  let gameMode = gameModes.ai;
+
+  function playRound(coordinates) {
+    const attack = currentPlayer.attack(coordinates);
+
+    if (isWinner()) {
+      changeState();
+    }
+
+    switchTurns();
+
+    return attack;
+  }
+
+  function switchTurns() {
+    changeCurrentPlayer();
+    changeCurrentBoard();
+  }
+
+  function changeCurrentPlayer() {
+    currentPlayer = currentPlayer === player1 ? player2 : player1;
+  }
+
+  function changeCurrentBoard() {
+    currentBoard =
+      currentBoard === player2Gameboard ? player1Gameboard : player2Gameboard;
+  }
+
+  function changeState() {
+    switch (state) {
+      case "playing":
+        state = gameState.gameover;
+        break;
+      case "placing-ship":
+        state = gameState.playing;
+        break;
+      case "gameover":
+        state = gameState.playing;
+        break;
+      default:
+    }
+  }
+
+  function isWinner() {
+    return player1Gameboard.allShipsSunk() || player2Gameboard.allShipsSunk();
+  }
+
+  function winner() {
+    return player1Gameboard.allShipsSunk() ? "You lose" : "You win";
+  }
+
+  function changeGameMode() {
+    gameMode = gameMode === "ai" ? gameModes.player : gameModes.ai;
+  }
+
+  return {
+    playRound,
+    switchTurns,
+    get player1Gameboard() {
+      return player1Gameboard;
+    },
+    get player2Gameboard() {
+      return player2Gameboard;
+    },
+    get player1() {
+      return player1;
+    },
+    get player2() {
+      return player2;
+    },
+    get currentPlayer() {
+      return currentPlayer;
+    },
+    get currentBoard() {
+      return currentBoard;
+    },
+    get state() {
+      return state;
+    },
+    get mode() {
+      return gameMode;
+    },
+    winner,
+    changeState,
+    changeGameMode,
+    changeCurrentBoard,
+  };
 };
 
 export default GameController;
