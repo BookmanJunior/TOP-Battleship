@@ -38,12 +38,6 @@ const BoardView = () => {
     return [...document.querySelectorAll(".square")];
   }
 
-  function getSquareCoordinates(cell) {
-    return cell.dataset.coordinates
-      .split(",")
-      .map((coordinate) => parseInt(coordinate, 10));
-  }
-
   function displayWinner(msg) {
     openModal();
     const winnerEl = modal.querySelector(".winner");
@@ -59,7 +53,6 @@ const BoardView = () => {
     renderShips,
     updateAttackedSquare,
     getSquares,
-    getSquareCoordinates,
     displayWinner,
   };
 };
