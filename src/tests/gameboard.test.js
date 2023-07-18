@@ -1,7 +1,8 @@
 import Gameboard from "../modules/gameboard";
 import Ship from "../modules/ship";
 
-const gameboard = Gameboard(Ship);
+const name = "testName";
+const gameboard = Gameboard(name, Ship);
 
 test("Gameboard has 10 rows", () => {
   expect(gameboard.board.length).toBe(10);
@@ -14,7 +15,7 @@ gameboard.board.forEach((row) => {
 });
 
 test("Given ship length and starting coordinates return its coordinates on the board", () => {
-  const board = Gameboard(Ship);
+  const board = Gameboard(name, Ship);
   board.placeShip(5, [0, 0]);
   expect(board.shipsCoordinates).toStrictEqual([
     [0, 0],
@@ -26,13 +27,13 @@ test("Given ship length and starting coordinates return its coordinates on the b
 });
 
 test("Prevents ship placement if ship length goes off board", () => {
-  const board = Gameboard(Ship);
+  const board = Gameboard(name, Ship);
   board.placeShip(5, [0, 6]);
   expect(board.shipsCoordinates).toStrictEqual([]);
 });
 
 test("Prevents ship placement if ship exists on given coordinates", () => {
-  const board = Gameboard(Ship);
+  const board = Gameboard(name, Ship);
   board.placeShip(4, [1, 0]);
   board.placeShip(5, [1, 3]);
   expect(board.shipsCoordinates).toStrictEqual([
@@ -44,7 +45,7 @@ test("Prevents ship placement if ship exists on given coordinates", () => {
 });
 
 test("Given ship length and starting coordinates place ship vertically and return its coordinates", () => {
-  const board = Gameboard(Ship);
+  const board = Gameboard(name, Ship);
   board.changePlacementPlane();
   board.placeShip(5, [0, 0]);
   expect(board.shipsCoordinates).toStrictEqual([
@@ -57,14 +58,14 @@ test("Given ship length and starting coordinates place ship vertically and retur
 });
 
 test("Prevents vertical ship placement if ship length goes off board", () => {
-  const board = Gameboard(Ship);
+  const board = Gameboard(name, Ship);
   board.changePlacementPlane();
   board.placeShip(5, [6, 0]);
   expect(board.shipsCoordinates).toStrictEqual([]);
 });
 
 test("Receive attack and sink a ship", () => {
-  const board = Gameboard(Ship);
+  const board = Gameboard(name, Ship);
   board.placeShip(4, [0, 0]);
   board.receiveAttack([0, 0]);
   board.receiveAttack([0, 1]);
@@ -74,7 +75,7 @@ test("Receive attack and sink a ship", () => {
 });
 
 test("Report all ships have been sunk", () => {
-  const testBoard = Gameboard(Ship);
+  const testBoard = Gameboard(name, Ship);
   testBoard.placeShip(1, [0, 0]);
   testBoard.placeShip(1, [1, 1]);
   testBoard.placeShip(1, [5, 5]);
@@ -85,7 +86,7 @@ test("Report all ships have been sunk", () => {
 });
 
 test("Randomize placement of 5 ships on board", () => {
-  const board = Gameboard(Ship);
+  const board = Gameboard(name, Ship);
   board.randomizeShipPlacement();
   expect(board.shipsCoordinates.length).toBe(16);
 });
