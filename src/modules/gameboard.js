@@ -6,6 +6,8 @@ const Gameboard = (name, shipMaker) => {
   const shipsCoordinates = [];
   const hitSquares = [];
   let isVertical = false;
+  // used to create ship
+  const availableShips = [5, 4, 3, 2, 2];
 
   function generateBoard() {
     const arr = [];
@@ -23,29 +25,23 @@ const Gameboard = (name, shipMaker) => {
 
     const ship = shipMaker(length);
     const shipInfo = ship.info;
+    const newCoordinates = getNewCoordinates(length, startingCoor);
 
-    for (let i = 0; i < shipInfo.length; i++) {
-      const newX = [startingCoor[0], startingCoor[1] + i];
-      const newY = [startingCoor[0] + i, startingCoor[1]];
-      const newCoordinates = isVertical ? newY : newX;
-
-      if (!isValidPlacement(newCoordinates)) {
-        return;
-      }
-      shipInfo.coordinates.push(newCoordinates);
+    // check if coordinates we generated properly
+    if (newCoordinates) {
+      shipInfo.coordinates.push(...newCoordinates);
+      ships.push(ship);
+      shipsCoordinates.push(...shipInfo.coordinates);
+      return ship;
     }
-    ships.push(ship);
-    shipsCoordinates.push(...shipInfo.coordinates);
-    return ship;
   };
 
   const randomizeShipPlacement = () => {
-    const shipsLength = [5, 4, 3, 2, 2];
-    for (let i = 0; i < shipsLength.length; i++) {
+    for (let i = 0; i < availableShips.length; i++) {
       const randomPlane = Math.floor(Math.random() * 2);
       isVertical = !!randomPlane;
       let randomCoordinate = generateRandomCoordinates();
-      while (!placeShip(shipsLength[i], randomCoordinate)) {
+      while (!placeShip(availableShips[i], randomCoordinate)) {
         randomCoordinate = generateRandomCoordinates();
       }
     }
@@ -72,6 +68,24 @@ const Gameboard = (name, shipMaker) => {
   const changePlacementPlane = () => {
     isVertical = !isVertical;
   };
+
+  function getNewCoordinates(shipLength, startingCoor) {
+    const allCoors = [];
+    for (let i = 0; i < shipLength; i++) {
+      const newX = [startingCoor[0], startingCoor[1] + i];
+      const newY = [startingCoor[0] + i, startingCoor[1]];
+      const newCoordinates = isVertical ? newY : newX;
+
+      if (!isValidPlacement(newCoordinates)) {
+        return;
+      }
+
+      allCoors.push(newCoordinates);
+    }
+    return allCoors;
+  }
+
+  const getAvailableShips = () => availableShips;
 
   function isValidPlacement(coordinates) {
     return isOnBoard(coordinates) && !isCoordinateOccupied(coordinates);
@@ -102,6 +116,9 @@ const Gameboard = (name, shipMaker) => {
     receiveAttack,
     allShipsSunk,
     randomizeShipPlacement,
+    getNewCoordinates,
+    isValidPlacement,
+    getAvailableShips,
     get hitSquares() {
       return hitSquares;
     },
