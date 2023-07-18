@@ -38,6 +38,12 @@ const GameController = () => {
     return attack;
   }
 
+  function isReadyToStart() {
+    return (
+      player1Gameboard.ships.length === 5 && player2Gameboard.ships.length === 5
+    );
+  }
+
   function switchTurns() {
     changeCurrentPlayer();
     changeCurrentBoard();
@@ -81,7 +87,12 @@ const GameController = () => {
 
   return {
     playRound,
+    isReadyToStart,
     switchTurns,
+    changeState,
+    changeGameMode,
+    changeCurrentBoard,
+    winner,
     get player1Gameboard() {
       return player1Gameboard;
     },
@@ -106,10 +117,6 @@ const GameController = () => {
     get mode() {
       return gameMode;
     },
-    winner,
-    changeState,
-    changeGameMode,
-    changeCurrentBoard,
   };
 };
 
