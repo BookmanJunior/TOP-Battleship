@@ -1,24 +1,11 @@
 import { generateRandomCoordinates } from "./coordinateGenerator";
 
 const Gameboard = (name, shipMaker) => {
-  const gameboard = generateBoard();
   const ships = [];
-  const shipsCoordinates = [];
-  const hitSquares = [];
-  let isVertical = false;
+  const attackedSquares = [];
   // used to create ship
   const availableShips = [5, 4, 3, 2, 2];
-
-  function generateBoard() {
-    const arr = [];
-    for (let i = 0; i < 10; i++) {
-      arr.push([]);
-      for (let j = 0; j < 10; j++) {
-        arr[i].push([]);
-      }
-    }
-    return arr;
-  }
+  let isVertical = false;
 
   const placeShip = (length, startingCoor) => {
     if (!isValidPlacement(startingCoor)) return;
@@ -31,9 +18,21 @@ const Gameboard = (name, shipMaker) => {
     if (newCoordinates) {
       shipInfo.coordinates.push(...newCoordinates);
       ships.push(ship);
-      shipsCoordinates.push(...shipInfo.coordinates);
       return ship;
     }
+  };
+
+  const receiveAttack = (coordinates) => {
+    const isShip = isShipCoordinate(coordinates);
+    if (isShip.length) {
+      isShip[0].hit();
+      // change ships sunk status if it was sunk
+      isShip[0].info.isSunk = !!isShip[0].isSunk();
+      attackedSquares.push(coordinates);
+      return isShip[0].isSunk() ? isShip[0].info.coordinates : "hit";
+    }
+    attackedSquares.push(coordinates);
+    return "miss";
   };
 
   const randomizeShipPlacement = () => {
@@ -45,28 +44,6 @@ const Gameboard = (name, shipMaker) => {
         randomCoordinate = generateRandomCoordinates();
       }
     }
-  };
-
-  const receiveAttack = (coordinates) => {
-    const isShip = isShipCoordinate(coordinates);
-    if (isShip.length) {
-      isShip[0].hit();
-      // change ships sunk status if it was sunk
-      isShip[0].info.isSunk = !!isShip[0].isSunk();
-      hitSquares.push(coordinates);
-      return isShip[0].isSunk() ? isShip[0].info.coordinates : "hit";
-    }
-    hitSquares.push(coordinates);
-    return "miss";
-  };
-
-  const allShipsSunk = () => {
-    const allSunkenShips = ships.filter((ship) => ship.info.isSunk);
-    return allSunkenShips.length === ships.length;
-  };
-
-  const changePlacementPlane = () => {
-    isVertical = !isVertical;
   };
 
   function getNewCoordinates(shipLength, startingCoor) {
@@ -85,20 +62,12 @@ const Gameboard = (name, shipMaker) => {
     return allCoors;
   }
 
-  const getAvailableShips = () => availableShips;
-
   function isValidPlacement(coordinates) {
-    return isOnBoard(coordinates) && !isCoordinateOccupied(coordinates);
+    return isOnBoard(coordinates) && !isShipCoordinate(coordinates).length;
   }
 
   function isOnBoard(coordinates) {
     return coordinates[0] <= 9 && coordinates[1] <= 9;
-  }
-
-  function isCoordinateOccupied(coordinates) {
-    return shipsCoordinates.find((square) =>
-      square.every((c, index) => c === coordinates[index])
-    );
   }
 
   function isShipCoordinate(coordinates) {
@@ -110,6 +79,14 @@ const Gameboard = (name, shipMaker) => {
     });
   }
 
+  const getAvailableShips = () => availableShips;
+
+  const allShipsSunk = () => ships.every((ship) => ship.info.isSunk);
+
+  const changePlacementPlane = () => {
+    isVertical = !isVertical;
+  };
+
   return {
     placeShip,
     changePlacementPlane,
@@ -117,16 +94,9 @@ const Gameboard = (name, shipMaker) => {
     allShipsSunk,
     randomizeShipPlacement,
     getNewCoordinates,
-    isValidPlacement,
     getAvailableShips,
-    get hitSquares() {
-      return hitSquares;
-    },
-    get board() {
-      return gameboard;
-    },
-    get shipsCoordinates() {
-      return shipsCoordinates;
+    get attackedSquares() {
+      return attackedSquares;
     },
     get ships() {
       return ships;
