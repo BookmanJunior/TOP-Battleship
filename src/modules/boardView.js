@@ -10,9 +10,11 @@ const BoardView = () => {
   };
 
   const renderShips = (boardObj) => {
-    const { shipsCoordinates } = boardObj;
+    const { ships } = boardObj;
 
-    updateSquare(boardObj, shipsCoordinates, "occupied", "ship");
+    ships.forEach((ship) => {
+      updateSquare(boardObj, ship.info.coordinates, "occupied", "ship");
+    });
   };
 
   const updateAttackedSquare = (currentBoard, square, attackResult) => {
@@ -51,6 +53,7 @@ const BoardView = () => {
   return {
     renderBoard,
     renderShips,
+    updateSquare,
     updateAttackedSquare,
     getSquares,
     displayWinner,
