@@ -1,6 +1,6 @@
-import Gameboard from "./gameboard";
-import Ship from "./ship";
-import Player from "./player";
+import Gameboard from "../modules/gameboard";
+import Ship from "../modules/ship";
+import Player from "../modules/player";
 
 const GameController = () => {
   const player1Gameboard = Gameboard("player1-gameboard", Ship);

@@ -1,18 +1,14 @@
 import GameController from "./gameController";
-import BoardView from "./boardView";
-import { generateAttackCoordinates } from "./coordinateGenerator";
+import BoardView from "../view/boardView";
+import ShipView from "../view/shipView";
+import { generateAttackCoordinates } from "../modules/coordinateGenerator";
 
 const screenController = () => {
   const game = GameController();
   const boardView = BoardView();
-
-  const cachedSquares = {
-    invalidSquares: [], // stores squares that weren't valid to remove styling
-    validSquares: [],
-  };
+  const shipView = ShipView(game.currentBoard);
 
   game.player2Gameboard.randomizeShipPlacement();
-
   boardView.renderBoard(game.player1Gameboard, "player1");
   boardView.renderBoard(game.player2Gameboard, "player2");
   boardView.renderShips(game.player1Gameboard);
@@ -22,23 +18,48 @@ const screenController = () => {
 
   boardSquares.forEach((square) => {
     square.addEventListener("mouseenter", () => {
-      highlightShipCoordinates(square);
+      if (game.state !== "placing-ship") {
+        return;
+      }
+
+      if (isTheRightBoard(square)) return;
+
+      shipView.highlightShipCoordinates(square);
     });
   });
 
   boardSquares.forEach((square) => {
-    square.addEventListener("mouseleave", removeShipCoordinatesHighlight);
+    square.addEventListener("mouseleave", () => {
+      if (game.state !== "placing-ship") return;
+
+      shipView.removeShipCoordinatesHighlight(square);
+    });
   });
 
   boardSquares.forEach((square) => {
-    square.addEventListener("click", placeShip);
+    square.addEventListener("click", () => {
+      if (!!isTheRightBoard(square) || game.state !== "placing-ship") return;
+
+      shipView.placeShip(square);
+
+      // start game when all ships have been placed
+      if (game.isReadyToStart() && game.mode === "ai") {
+        game.changeState();
+        // set current board to player2 to display attack correctly
+        game.changeCurrentBoard();
+      }
+    });
+  });
+
+  document.body.addEventListener("keydown", (e) => {
+    if (game.state !== "placing-ship") return;
+
+    shipView.changeShipPlacement(e);
   });
 
   boardSquares.forEach((square) => {
     square.addEventListener("click", play);
   });
-
-  document.body.addEventListener("keydown", changeShipPlacement);
 
   function play(square) {
     const squareInfo = square.target;
@@ -77,93 +98,6 @@ const screenController = () => {
       );
       makeTurn(game.player1Gameboard, attackedSquareEl, randomCoordinates);
     }
-  }
-
-  function placeShip(square) {
-    const squareInfo = square.target;
-    if (!!isTheRightBoard(squareInfo) || game.state !== "placing-ship") return;
-
-    const squareCoordinates = parseSquareCoordinates(squareInfo);
-    if (
-      game.currentBoard.placeShip(
-        game.currentBoard.getAvailableShips()[0],
-        squareCoordinates
-      )
-    ) {
-      cachedSquares.validSquares.forEach((s) => {
-        s.dataset.occupied = "ship";
-        s.classList.remove("potential-placement");
-      });
-      cachedSquares.validSquares = [];
-      game.currentBoard.getAvailableShips().shift();
-    }
-
-    // start game when all ships have been placed
-    if (game.isReadyToStart() && game.mode === "ai") {
-      game.changeState();
-      // set current board to player2 to display attack correctly
-      game.changeCurrentBoard();
-    }
-  }
-
-  function changeShipPlacement(e) {
-    if (
-      e.key.toLocaleLowerCase() === "r" &&
-      e.ctrlKey &&
-      e.altKey &&
-      cachedSquares.validSquares.length &&
-      game.state === "placing-ship"
-    ) {
-      game.currentBoard.changePlacementPlane();
-      // recalculate ship placement
-      const startingCoor = cachedSquares.validSquares[0];
-      removeShipCoordinatesHighlight();
-      // synchronizes animation
-      setTimeout(() => {
-        highlightShipCoordinates(startingCoor);
-      }, 20);
-    }
-  }
-
-  function highlightShipCoordinates(square) {
-    // const squareInfo = square.target;
-    if (game.state !== "placing-ship") {
-      return;
-    }
-
-    if (isTheRightBoard(square)) return;
-
-    const squareCoor = parseSquareCoordinates(square);
-    const isValidCoordinatePlacement = game.currentBoard.getNewCoordinates(
-      game.currentBoard.getAvailableShips()[0],
-      squareCoor
-    );
-    if (!isValidCoordinatePlacement) {
-      square.style.cursor = "not-allowed";
-      // cache square to remove styles
-      cachedSquares.invalidSquares.push(square);
-      // cache square for when user wants to change placement axis
-      cachedSquares.validSquares.push(square);
-      return;
-    }
-    isValidCoordinatePlacement.forEach((s) => {
-      const squareEl = document.querySelector(`[data-coordinates="${s}"]`);
-      squareEl.classList.add("potential-placement");
-      cachedSquares.validSquares.push(squareEl);
-    });
-  }
-
-  function removeShipCoordinatesHighlight() {
-    if (game.state !== "placing-ship") return;
-
-    cachedSquares.validSquares.forEach((cachedSquare) => {
-      cachedSquare.classList.remove("potential-placement");
-      if (cachedSquare.hasAttribute("style")) {
-        cachedSquare.removeAttribute("style");
-      }
-    });
-    // reset cached squares when player stops hovering over a square
-    cachedSquares.validSquares = [];
   }
 
   function isTheRightBoard(square) {
