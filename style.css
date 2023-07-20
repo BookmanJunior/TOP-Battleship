@@ -122,18 +122,12 @@ main {
 .column-letters {
   grid-column: 2;
   grid-row: 2;
-  grid-template-columns: repeat(
-    10,
-    min(var(--square-size), var(--square-size-small))
-  );
+  grid-template-columns: repeat(10, var(--square-size));
   color: var(--main-font-clr);
 }
 
 .row-numeration {
-  grid-template-rows: repeat(
-    10,
-    min(var(--square-size), var(--square-size-small))
-  );
+  grid-template-rows: repeat(10, var(--square-size));
   color: var(--main-font-clr);
 }
 
@@ -226,7 +220,12 @@ main {
   }
 
   .column-letters {
+    grid-template-columns: repeat(10, var(--square-size-small));
     gap: var(--square-gap-small);
+  }
+
+  .row-numeration {
+    grid-template-rows: repeat(10, var(--square-size-small));
   }
 
   .square {
