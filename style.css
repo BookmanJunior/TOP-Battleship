@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap");
 
 :root {
   --main-square-clr: #dff4ff;
@@ -7,10 +8,12 @@
   --secondary-font-clr: #ffffff;
   --ship-clr: #3b16bf;
   --bright-accent-clr: #ff0055;
-  --mild-accent-clr: #858888;
+  --mild-accent-clr: #344e4e;
   --secondary-accent-clr: #65708b;
   --square-size: 2.5rem;
   --square-gap: 0.313em;
+  --square-size-small: 1.8rem;
+  --square-gap-small: 0.2em;
 }
 
 *,
@@ -113,17 +116,24 @@ main {
   display: grid;
   gap: var(--square-gap);
   text-align: center;
+  align-items: center;
 }
 
 .column-letters {
   grid-column: 2;
   grid-row: 2;
-  grid-template-columns: repeat(10, var(--square-size));
+  grid-template-columns: repeat(
+    10,
+    min(var(--square-size), var(--square-size-small))
+  );
   color: var(--main-font-clr);
 }
 
 .row-numeration {
-  grid-template-rows: repeat(10, var(--square-size));
+  grid-template-rows: repeat(
+    10,
+    min(var(--square-size), var(--square-size-small))
+  );
   color: var(--main-font-clr);
 }
 
@@ -168,20 +178,20 @@ main {
   background-color: var(--ship-clr);
 }
 
-.square[data-status="hit"]::after {
-  content: "";
-  height: 20px;
-  aspect-ratio: 1;
-  background-color: var(--bright-accent-clr);
-  border-radius: 50%;
-}
-
+.square[data-status="hit"]::after,
 .square[data-status="miss"]::after {
   content: "";
   height: 20px;
   aspect-ratio: 1;
-  background-color: var(--mild-accent-clr);
   border-radius: 50%;
+}
+
+.square[data-status="hit"]::after {
+  background-color: var(--bright-accent-clr);
+}
+
+.square[data-status="miss"]::after {
+  background-color: var(--mild-accent-clr);
 }
 
 .square[data-status="sunk"] {
@@ -195,5 +205,45 @@ main {
 @keyframes highlightShip {
   to {
     background-color: var(--ship-clr);
+  }
+}
+
+/* media queries */
+
+@media screen and (max-width: 550px) {
+  main {
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .gameboard-wrapper {
+    grid-template-columns: 15px 1fr;
+    font-size: 1rem;
+  }
+
+  .row {
+    gap: var(--square-gap-small);
+  }
+
+  .column-letters {
+    gap: var(--square-gap-small);
+  }
+
+  .square {
+    max-width: var(--square-size-small);
+    max-height: var(--square-size-small);
+  }
+
+  .fleet-sign {
+    border-radius: 0;
+  }
+
+  .square[data-status="hit"]::after,
+  .square[data-status="miss"]::after {
+    height: 13px;
+  }
+
+  .graveyard {
+    display: none;
   }
 }
