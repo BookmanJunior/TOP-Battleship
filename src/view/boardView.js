@@ -1,4 +1,4 @@
-import Board from "./boardComponents";
+import Board from "../modules/boardComponents";
 
 const BoardView = () => {
   const main = document.getElementById("main");
