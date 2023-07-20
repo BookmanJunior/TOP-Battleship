@@ -31,20 +31,21 @@ const Board = (boardObj, player) => {
     const gameBoardDiv = document.createElement("div");
     gameBoardDiv.classList.add(`${player}-gameboard`, "gameboard");
 
-    boardObj.board.forEach((row, rowIndex) => {
+    for (let i = 0; i < 10; i++) {
       const rowDiv = document.createElement("div");
       rowDiv.classList.add("row");
-
-      row.forEach((square, squareIndex) => {
+      for (let j = 0; j < 10; j++) {
         const squareDiv = document.createElement("div");
         squareDiv.classList.add("square");
-        squareDiv.dataset.coordinates = [rowIndex, squareIndex];
+        squareDiv.dataset.coordinates = [i, j];
         squareDiv.dataset.status = "none";
         squareDiv.dataset.occupied = "empty";
+        squareDiv.dataset.reserved = "no";
+        squareDiv.dataset.name = "";
         rowDiv.appendChild(squareDiv);
-      });
+      }
       gameBoardDiv.appendChild(rowDiv);
-    });
+    }
 
     return gameBoardDiv;
   }
