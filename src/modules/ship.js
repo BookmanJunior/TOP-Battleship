@@ -4,6 +4,7 @@ const Ship = (length) => {
     hitCount: 0,
     isSunk: false,
     coordinates: [],
+    adjacentSquares: [],
   };
 
   const hit = () => {
