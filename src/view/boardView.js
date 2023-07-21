@@ -2,7 +2,6 @@ import Board from "../modules/boardComponents";
 
 const BoardView = () => {
   const main = document.getElementById("main");
-  const modal = document.querySelector("dialog");
 
   const renderBoard = (boardObj, player) => {
     const newGameBoard = Board(boardObj, player);
@@ -19,8 +18,9 @@ const BoardView = () => {
 
   const updateAttackedSquare = (currentBoard, square, attackResult) => {
     // sunk ship returns array
-    if (Array.isArray(attackResult)) {
-      updateSquare(currentBoard, attackResult, "status", "sunk");
+    if (typeof attackResult === "object") {
+      updateSquare(currentBoard, attackResult.coordinates, "status", "sunk");
+      updateSquare(currentBoard, attackResult.adjacentSquares, "fog", "true");
       return;
     }
 
@@ -36,27 +36,11 @@ const BoardView = () => {
     });
   }
 
-  function getSquares() {
-    return [...document.querySelectorAll(".square")];
-  }
-
-  function displayWinner(msg) {
-    openModal();
-    const winnerEl = modal.querySelector(".winner");
-    winnerEl.textContent = msg;
-  }
-
-  function openModal() {
-    modal.showModal();
-  }
-
   return {
     renderBoard,
     renderShips,
     updateSquare,
     updateAttackedSquare,
-    getSquares,
-    displayWinner,
   };
 };
 
