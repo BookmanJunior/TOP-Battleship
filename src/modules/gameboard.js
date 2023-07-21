@@ -1,11 +1,11 @@
 import { generateRandomCoordinates } from "./coordinateGenerator";
 
 const Gameboard = (name, shipMaker) => {
-  const ships = [];
-  const attackedSquares = [];
+  let ships = [];
+  let attackedSquares = [];
   let isVertical = false;
   // used to create ship
-  const availableShips = [5, 4, 3, 2, 2];
+  let availableShips = [5, 4, 3, 2, 2];
 
   const placeShip = (length, startingCoor) => {
     if (!isValidPlacement(startingCoor)) return;
@@ -152,6 +152,18 @@ const Gameboard = (name, shipMaker) => {
     isVertical = !isVertical;
   };
 
+  const resetShips = () => {
+    ships = [];
+  };
+
+  const resetAttackedSquares = () => {
+    attackedSquares = [];
+  };
+
+  const resetAvailableShips = () => {
+    availableShips = [5, 4, 3, 2, 2];
+  };
+
   return {
     placeShip,
     changePlacementPlane,
@@ -160,6 +172,9 @@ const Gameboard = (name, shipMaker) => {
     randomizeShipPlacement,
     getNewCoordinates,
     getAvailableShips,
+    resetShips,
+    resetAttackedSquares,
+    resetAvailableShips,
     get attackedSquares() {
       return attackedSquares;
     },
