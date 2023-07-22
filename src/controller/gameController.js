@@ -38,6 +38,20 @@ const GameController = () => {
     return attack;
   }
 
+  function restartGame() {
+    const gameboards = [player1Gameboard, player2Gameboard];
+    currentPlayer = player1;
+    currentBoard = player1Gameboard;
+    changeState();
+
+    // reset gameboards
+    gameboards.forEach((gameboard) => {
+      gameboard.resetShips();
+      gameboard.resetAttackedSquares();
+      gameboard.resetAvailableShips();
+    });
+  }
+
   function isReadyToStart() {
     return (
       player1Gameboard.ships.length === 5 && player2Gameboard.ships.length === 5
@@ -49,15 +63,6 @@ const GameController = () => {
     changeCurrentBoard();
   }
 
-  function changeCurrentPlayer() {
-    currentPlayer = currentPlayer === player1 ? player2 : player1;
-  }
-
-  function changeCurrentBoard() {
-    currentBoard =
-      currentBoard === player2Gameboard ? player1Gameboard : player2Gameboard;
-  }
-
   function changeState() {
     switch (state) {
       case "playing":
@@ -67,10 +72,23 @@ const GameController = () => {
         state = gameState.playing;
         break;
       case "gameover":
-        state = gameState.playing;
+        state = gameState["placing-ship"];
         break;
       default:
     }
+  }
+
+  function changeCurrentPlayer() {
+    currentPlayer = currentPlayer === player1 ? player2 : player1;
+  }
+
+  function changeCurrentBoard() {
+    currentBoard =
+      currentBoard === player2Gameboard ? player1Gameboard : player2Gameboard;
+  }
+
+  function changeGameMode() {
+    gameMode = gameMode === "ai" ? gameModes.player : gameModes.ai;
   }
 
   function isWinner() {
@@ -81,10 +99,6 @@ const GameController = () => {
     return player1Gameboard.allShipsSunk() ? "You lose" : "You win";
   }
 
-  function changeGameMode() {
-    gameMode = gameMode === "ai" ? gameModes.player : gameModes.ai;
-  }
-
   return {
     playRound,
     isReadyToStart,
@@ -93,6 +107,7 @@ const GameController = () => {
     changeGameMode,
     changeCurrentBoard,
     winner,
+    restartGame,
     get player1Gameboard() {
       return player1Gameboard;
     },
