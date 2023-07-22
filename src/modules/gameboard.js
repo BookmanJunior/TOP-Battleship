@@ -29,8 +29,13 @@ const Gameboard = (name, shipMaker) => {
       // change ships sunk status if it was sunk
       isShip[0].info.isSunk = !!isShip[0].isSunk();
       attackedSquares.push(coordinates);
+      const attackResult = isShip[0].isSunk() ? isShip[0].info : "hit";
 
-      return isShip[0].isSunk() ? isShip[0].info : "hit";
+      if (typeof attackResult === "object") {
+        attackedSquares.push(...isShip[0].info.adjacentSquares);
+      }
+
+      return attackResult;
     }
     attackedSquares.push(coordinates);
     return "miss";
