@@ -20,7 +20,7 @@ const BoardView = () => {
     // sunk ship returns array
     if (typeof attackResult === "object") {
       updateSquare(currentBoard, attackResult.coordinates, "status", "sunk");
-      updateSquare(currentBoard, attackResult.adjacentSquares, "fog", "true");
+      updateSquare(currentBoard, attackResult.adjacentSquares, "status", "fog");
       return;
     }
 
