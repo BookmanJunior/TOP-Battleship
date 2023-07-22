@@ -40,7 +40,7 @@ const Board = (boardObj, player) => {
         squareDiv.dataset.coordinates = [i, j];
         squareDiv.dataset.status = "none";
         squareDiv.dataset.occupied = "empty";
-        squareDiv.dataset.fog = "false";
+        // squareDiv.dataset.fog = "false";
         squareDiv.dataset.name = "";
         rowDiv.appendChild(squareDiv);
       }
