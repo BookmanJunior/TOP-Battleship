@@ -12,6 +12,8 @@
   --secondary-accent-clr: #65708b;
   --square-size: 2.5rem;
   --square-gap: 0.313em;
+  --square-size-medium: 2.2rem;
+  --square-gap: 0.25em;
   --square-size-small: 1.8rem;
   --square-gap-small: 0.2em;
 }
@@ -220,7 +222,7 @@ main {
 
 /* media queries */
 
-@media screen and (max-width: 550px) {
+@media screen and (min-width: 375px) and (max-width: 950px) {
   main {
     flex-direction: column;
     gap: 1em;
@@ -261,6 +263,29 @@ main {
 
   .graveyard {
     display: none;
+  }
+}
+
+@media screen and (min-width: 950px) and (max-width: 1160px) {
+  main {
+    gap: 5em;
+  }
+
+  .gameboard-wrapper {
+    font-size: 1.3rem;
+  }
+
+  .square {
+    max-width: var(--square-size-medium);
+    max-height: var(--square-size-medium);
+  }
+
+  .column-letters {
+    grid-template-columns: repeat(10, var(--square-size-medium));
+  }
+
+  .row-numeration {
+    grid-template-rows: repeat(10, var(--square-size-medium));
   }
 }
 
