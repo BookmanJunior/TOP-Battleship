@@ -8,19 +8,20 @@ const BoardView = () => {
     main.appendChild(newGameBoard.createGameboardComponents());
   };
 
-  const renderShips = (boardObj) => {
-    const { ships } = boardObj;
+  const renderShip = (board, ship) => {
+    updateSquare(board, ship.coordinates, "occupied", "ship");
+  };
 
-    ships.forEach((ship) => {
-      updateSquare(boardObj, ship.info.coordinates, "occupied", "ship");
-    });
+  const renderFog = (board, ship) => {
+    updateSquare(board, ship.adjacentSquares, "status", "fog");
   };
 
   const updateAttackedSquare = (currentBoard, square, attackResult) => {
     // sunk ship returns array
     if (typeof attackResult === "object") {
-      updateSquare(currentBoard, attackResult.coordinates, "status", "sunk");
-      updateSquare(currentBoard, attackResult.adjacentSquares, "status", "fog");
+      renderShip(currentBoard, attackResult);
+      renderFog(currentBoard, attackResult);
+      square.dataset.status = "hit";
       return;
     }
 
@@ -38,7 +39,7 @@ const BoardView = () => {
 
   return {
     renderBoard,
-    renderShips,
+    renderShip,
     updateSquare,
     updateAttackedSquare,
   };
