@@ -6,9 +6,9 @@
   --square-accent-clr: #93d4f7;
   --main-font-clr: #717c96;
   --secondary-font-clr: #ffffff;
-  --ship-clr: #3b16bf;
+  --ship-clr: #bdbec9;
   --bright-accent-clr: #ff0055;
-  --mild-accent-clr: #404e4e;
+  --mild-accent-clr: #a5a6af;
   --secondary-accent-clr: #65708b;
   --square-size: 2.5rem;
   --square-gap: 0.313em;
@@ -139,8 +139,7 @@ main {
 /* gameboard styles */
 
 .gameboard {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: var(--square-gap);
 }
 
@@ -172,12 +171,25 @@ main {
   background-color: var(--ship-clr);
 }
 
+.square[data-occupied="ship"] {
+  border-color: #8f9099;
+}
+
+.square[data-occupied="ship"]::after {
+  background-color: var(--mild-accent-clr);
+}
+
 .square[data-status="hit"]::after,
-.square[data-status="miss"]::after {
+.square[data-status="miss"]::after,
+.square[data-occupied="ship"]::after {
   content: "";
-  height: 20px;
+  height: 18px;
   aspect-ratio: 1;
   border-radius: 50%;
+}
+
+.square:is([data-status="sunk"][data-occupied="ship"])::after {
+  height: 0;
 }
 
 .square[data-status="fog"] {
@@ -242,7 +254,8 @@ main {
   }
 
   .square[data-status="hit"]::after,
-  .square[data-status="miss"]::after {
+  .square[data-status="miss"]::after,
+  .square[data-occupied="ship"]::after {
     height: 13px;
   }
 
