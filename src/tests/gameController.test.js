@@ -1,4 +1,4 @@
-import GameController from "../modules/gameController";
+import GameController from "../controller/gameController";
 
 test("Game Over when one player loses all ships", () => {
   const game = GameController();
