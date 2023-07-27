@@ -1,3 +1,5 @@
+import parseSquareCoordinates from "../modules/squareParser";
+
 const ShipView = (boardObj) => {
   // cache hovered squares
   const cachedSquares = {
@@ -67,12 +69,6 @@ const ShipView = (boardObj) => {
         highlightShipCoordinates(startingCoor);
       }, 20);
     }
-  }
-
-  function parseSquareCoordinates(cell) {
-    return cell.dataset.coordinates
-      .split(",")
-      .map((coordinate) => parseInt(coordinate, 10));
   }
 
   return {
