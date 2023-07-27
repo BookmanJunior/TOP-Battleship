@@ -2,6 +2,7 @@ import GameController from "./gameController";
 import BoardView from "../view/boardView";
 import ShipView from "../view/shipView";
 import GeneralView from "../view/generalView";
+import parseSquareCoordinates from "../modules/squareParser";
 import { generateAttackCoordinates } from "../modules/coordinateGenerator";
 
 const screenController = () => {
@@ -74,8 +75,6 @@ const screenController = () => {
   }
 
   function play(square) {
-    const coordinates = parseSquareCoordinates(square);
-
     if (
       game.state !== "playing" ||
       square.dataset.status !== "none" ||
@@ -83,6 +82,7 @@ const screenController = () => {
     )
       return;
 
+    const coordinates = parseSquareCoordinates(square);
     makeTurn(game.currentBoard, square, coordinates);
   }
 
@@ -115,12 +115,6 @@ const screenController = () => {
       (game.currentPlayer === game.player2 &&
         gameboardEl.classList.contains(`player1-gameboard`))
     );
-  }
-
-  function parseSquareCoordinates(cell) {
-    return cell.dataset.coordinates
-      .split(",")
-      .map((coordinate) => parseInt(coordinate, 10));
   }
 
   return {
