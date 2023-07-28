@@ -36,12 +36,12 @@ const Board = (boardObj, player) => {
       rowDiv.classList.add("row");
       for (let j = 0; j < 10; j++) {
         const squareDiv = document.createElement("div");
+
         squareDiv.classList.add("square");
         squareDiv.dataset.coordinates = [i, j];
         squareDiv.dataset.status = "none";
         squareDiv.dataset.occupied = "empty";
-        // squareDiv.dataset.fog = "false";
-        squareDiv.dataset.name = "";
+
         rowDiv.appendChild(squareDiv);
       }
       gameBoardDiv.appendChild(rowDiv);
