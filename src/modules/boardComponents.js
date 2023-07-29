@@ -1,4 +1,4 @@
-const Board = (boardObj, player) => {
+const Board = (player) => {
   const boardNotation = {
     A: 1,
     B: 2,

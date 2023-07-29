@@ -3,8 +3,8 @@ import Board from "../modules/boardComponents";
 const BoardView = () => {
   const main = document.getElementById("main");
 
-  const renderBoard = (boardObj, player) => {
-    const newGameBoard = Board(boardObj, player);
+  const renderBoard = (player) => {
+    const newGameBoard = Board(player);
     main.appendChild(newGameBoard.createGameboardComponents());
   };
 

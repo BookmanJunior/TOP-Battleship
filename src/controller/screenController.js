@@ -70,8 +70,8 @@ const screenController = () => {
 
   function init() {
     game.player2Gameboard.randomizeShipPlacement();
-    boardView.renderBoard(game.player1Gameboard, "player1");
-    boardView.renderBoard(game.player2Gameboard, "player2");
+    boardView.renderBoard("player1");
+    boardView.renderBoard("player2");
   }
 
   function play(square) {
